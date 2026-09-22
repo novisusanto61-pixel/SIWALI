@@ -1,11 +1,497 @@
-<div align="center">
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIWALI - Sistem Informasi Wali Murid</title>
+<style>
+  :root{--bg:#f1f5f9;--card:#ffffff;--text:#0f172a;--muted:#64748b;--border:#e2e8f0;--primary:#4f46e5;--primary-dark:#4338ca;}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#334155;}}
+  :root[data-theme="dark"]{--bg:#0f172a;--card:#1e293b;--text:#f1f5f9;--muted:#94a3b8;--border:#334155;}
+  *{box-sizing:border-box;}
+  html,body{background:var(--bg);color:var(--text);margin:0;}
+  body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;}
+  table{border-collapse:collapse;}
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+  /* ---- komponen ---- */
+  .card{background:var(--card);border:1px solid var(--border);}
+  .muted{color:var(--muted);}
+  .input{width:100%;padding:.55rem .75rem;border-radius:.6rem;border:1px solid var(--border);background:var(--card);color:var(--text);outline:none;font-family:inherit;font-size:.9rem;}
+  .input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,70,229,.15);}
+  .btn-primary{background:var(--primary);color:#fff;padding:.55rem 1.1rem;border-radius:.6rem;font-weight:600;transition:.15s;}
+  .btn-primary:hover{background:var(--primary-dark);}
+  .btn-outline{border:1px solid var(--border);padding:.5rem 1rem;border-radius:.6rem;font-weight:600;color:var(--text);}
+  .btn-outline:hover{background:var(--bg);}
+  .tab-btn{padding:.6rem 1rem;border-radius:.6rem;font-weight:600;font-size:.9rem;color:var(--muted);}
+  .tab-btn.active{background:var(--primary);color:#fff;}
+  .badge{padding:.15rem .6rem;border-radius:999px;font-size:.72rem;font-weight:700;}
 
-  <h1>Built with AI Studio</h2>
+  /* ---- utility layout ---- */
+  .min-h-screen{min-height:100vh;}
+  .flex{display:flex;}
+  .grid{display:grid;}
+  .items-center{align-items:center;}
+  .items-start{align-items:flex-start;}
+  .justify-between{justify-content:space-between;}
+  .justify-center{justify-content:center;}
+  .flex-wrap{flex-wrap:wrap;}
+  .flex-1{flex:1 1 0%;}
+  .overflow-x-auto{overflow-x:auto;}
+  .border-b{border-bottom:1px solid var(--border);}
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+  /* ---- utility spacing ---- */
+  .mx-auto{margin-left:auto;margin-right:auto;}
+  .px-2{padding-left:.5rem;padding-right:.5rem;}
+  .px-3{padding-left:.75rem;padding-right:.75rem;}
+  .px-4{padding-left:1rem;padding-right:1rem;}
+  .py-2{padding-top:.5rem;padding-bottom:.5rem;}
+  .py-4{padding-top:1rem;padding-bottom:1rem;}
+  .py-5{padding-top:1.25rem;padding-bottom:1.25rem;}
+  .py-6{padding-top:1.5rem;padding-bottom:1.5rem;}
+  .p-3{padding:.75rem;}
+  .p-4{padding:1rem;}
+  .p-5{padding:1.25rem;}
+  .gap-2{gap:.5rem;}
+  .gap-3{gap:.75rem;}
+  .mb-1{margin-bottom:.25rem;}
+  .mb-2{margin-bottom:.5rem;}
+  .mb-3{margin-bottom:.75rem;}
+  .mb-4{margin-bottom:1rem;}
+  .mb-5{margin-bottom:1.25rem;}
+  .mb-6{margin-bottom:1.5rem;}
+  .mt-1{margin-top:.25rem;}
+  .mt-2{margin-top:.5rem;}
+  .ml-2{margin-left:.5rem;}
+  .mr-3{margin-right:.75rem;}
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+  /* ---- utility sizing ---- */
+  .w-11{width:2.75rem;}
+  .h-11{height:2.75rem;}
+  .w-14{width:3.5rem;}
+  .h-14{height:3.5rem;}
+  .w-full{width:100%;}
+  .w-max{width:-moz-max-content;width:max-content;}
+  .max-w-sm{max-width:24rem;}
+  .max-w-xl{max-width:36rem;}
+  .max-w-5xl{max-width:64rem;}
 
-</div>
+  /* ---- utility teks ---- */
+  .text-xs{font-size:.75rem;}
+  .text-sm{font-size:.875rem;}
+  .text-lg{font-size:1.125rem;}
+  .text-xl{font-size:1.25rem;}
+  .text-2xl{font-size:1.5rem;}
+  .font-medium{font-weight:500;}
+  .font-semibold{font-weight:600;}
+  .font-bold{font-weight:700;}
+  .leading-tight{line-height:1.25;}
+  .text-left{text-align:left;}
+  .text-right{text-align:right;}
+  .text-center{text-align:center;}
+  .whitespace-nowrap{white-space:nowrap;}
+  .italic{font-style:italic;}
+
+  /* ---- utility warna ---- */
+  .bg-indigo-600{background-color:#4f46e5;}
+  .text-white{color:#fff;}
+  .text-indigo-600{color:#4f46e5;}
+  .text-red-600{color:#dc2626;}
+
+  /* ---- utility radius ---- */
+  .rounded-lg{border-radius:.5rem;}
+  .rounded-xl{border-radius:.75rem;}
+  .rounded-2xl{border-radius:1rem;}
+
+  @media (min-width:640px){
+    .sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .sm\:col-span-2{grid-column:span 2 / span 2;}
+  }
+</style>
+</head>
+<body>
+<div id="app" class="min-h-screen"></div>
+
+<script>
+/* ===== Utils ===== */
+const $ = id => document.getElementById(id);
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function todayISO(){return new Date().toISOString();}
+function fmtDate(s){try{return new Date(s).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return s;}}
+function loadLS(key, fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback;}catch(e){return fallback;}}
+function saveLS(key, val){try{localStorage.setItem(key, JSON.stringify(val));}catch(e){console.error('storage gagal',e);}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+/* ===== Data ===== */
+let siswaData = loadLS('siwali_siswa', []);
+let adminData = loadLS('siwali_admin', null);
+if(!adminData){
+  adminData = {username:'admin', password:'admin123'};
+  saveLS('siwali_admin', adminData);
+}
+let notifData = loadLS('siwali_notif', null);
+if(!notifData){
+  notifData = [
+    {id:uid(), judul:'Libur Semester Ganjil', isi:'Diberitahukan kepada seluruh wali murid bahwa libur semester ganjil dimulai tanggal 20 Desember 2026 s.d. 2 Januari 2027. Kegiatan belajar mengajar aktif kembali pada 3 Januari 2027.', tanggal:todayISO()},
+    {id:uid(), judul:'Pengambilan Rapor', isi:'Pengambilan rapor semester ganjil dilaksanakan hari Sabtu, 13 Desember 2026 pukul 08.00 - 12.00 WIB di ruang kelas masing-masing. Mohon wali murid hadir tepat waktu.', tanggal:todayISO()}
+  ];
+  saveLS('siwali_notif', notifData);
+}
+let laporanData = loadLS('siwali_laporan', []);
+
+/* ===== Session & UI state ===== */
+let session = loadLS('siwali_session', null);
+let loginTab = 'wali';
+let activeTab = null;
+let siswaForm = null;   // null | {} | {...data}
+let notifForm = null;   // null | {} | {...data}
+let respondingId = null;
+let msg = '';
+
+function saveAll(){
+  saveLS('siwali_siswa', siswaData);
+  saveLS('siwali_notif', notifData);
+  saveLS('siwali_laporan', laporanData);
+}
+
+/* ===== Auth ===== */
+function doLoginAdmin(e){
+  e.preventDefault();
+  const u=$('la_user').value.trim(), p=$('la_pass').value;
+  if(u===adminData.username && p===adminData.password){
+    session={role:'admin', nama:'Administrator'};
+    saveLS('siwali_session', session); activeTab='data'; render();
+  } else { msg='Username atau password admin salah.'; render(); }
+}
+function doLoginWali(e){
+  e.preventDefault();
+  const u=$('lw_user').value.trim(), p=$('lw_pass').value;
+  const s = siswaData.find(x=>x.username===u && x.password===p);
+  if(s){
+    session={role:'wali', username:s.username, nama:s.wali_nama, siswa_id:s.id, siswa_nama:s.nama};
+    saveLS('siwali_session', session); activeTab='notif'; render();
+  } else { msg='Username atau password wali salah. Hubungi admin sekolah.'; render(); }
+}
+function logout(){ session=null; localStorage.removeItem('siwali_session'); activeTab=null; render(); }
+
+function gantiPasswordAdmin(e){
+  e.preventDefault();
+  const lama=$('gp_lama').value, baru=$('gp_baru').value, ulang=$('gp_ulang').value;
+  if(lama!==adminData.password){msg='Password lama salah.';render();return;}
+  if(baru.length<6){msg='Password baru minimal 6 karakter.';render();return;}
+  if(baru!==ulang){msg='Konfirmasi password baru tidak cocok.';render();return;}
+  adminData = {...adminData, password:baru};
+  saveLS('siwali_admin', adminData);
+  msg='Password admin berhasil diubah.'; render();
+}
+
+/* ===== Admin: Siswa & Wali ===== */
+function openSiswaForm(id){
+  siswaForm = id ? {...siswaData.find(s=>s.id===id)} : {id:null,nama:'',kelas:'',wali_nama:'',username:'',password:''};
+  render();
+}
+function closeSiswaForm(){ siswaForm=null; render(); }
+function saveSiswa(e){
+  e.preventDefault();
+  const data = {
+    nama: $('s_nama').value.trim(), kelas:$('s_kelas').value.trim(),
+    wali_nama: $('s_wali').value.trim(), username:$('s_user').value.trim(),
+    password: $('s_pass').value.trim()
+  };
+  if(!data.nama||!data.kelas||!data.wali_nama||!data.username||!data.password){msg='Semua field wajib diisi.';render();return;}
+  const dup = siswaData.find(x=>x.username===data.username && x.id!==siswaForm.id);
+  if(dup){msg='Username wali sudah dipakai, gunakan yang lain.';render();return;}
+  if(siswaForm.id){
+    siswaData = siswaData.map(s=>s.id===siswaForm.id?{...s,...data}:s);
+  } else {
+    siswaData.push({id:uid(), ...data});
+  }
+  saveAll(); siswaForm=null; msg='Data siswa & wali tersimpan.'; render();
+}
+function deleteSiswa(id){
+  if(!confirm('Hapus data siswa & wali ini?'))return;
+  siswaData = siswaData.filter(s=>s.id!==id);
+  saveAll(); render();
+}
+
+/* ===== Admin: Notifikasi ===== */
+function openNotifForm(id){
+  notifForm = id ? {...notifData.find(n=>n.id===id)} : {id:null,judul:'',isi:''};
+  render();
+}
+function closeNotifForm(){ notifForm=null; render(); }
+function saveNotif(e){
+  e.preventDefault();
+  const judul=$('n_judul').value.trim(), isi=$('n_isi').value.trim();
+  if(!judul||!isi){msg='Judul dan isi pemberitahuan wajib diisi.';render();return;}
+  if(notifForm.id){
+    notifData = notifData.map(n=>n.id===notifForm.id?{...n,judul,isi}:n);
+  } else {
+    notifData.unshift({id:uid(), judul, isi, tanggal:todayISO()});
+  }
+  saveAll(); notifForm=null; msg='Pemberitahuan tersimpan.'; render();
+}
+function deleteNotif(id){
+  if(!confirm('Hapus pemberitahuan ini?'))return;
+  notifData = notifData.filter(n=>n.id!==id);
+  saveAll(); render();
+}
+
+/* ===== Laporan ===== */
+function submitLaporan(e){
+  e.preventDefault();
+  const judul=$('lp_judul').value.trim(), isi=$('lp_isi').value.trim();
+  if(!judul||!isi){msg='Judul dan isi laporan wajib diisi.';render();return;}
+  laporanData.unshift({id:uid(), wali_username:session.username, wali_nama:session.nama, siswa_nama:session.siswa_nama, judul, isi, tanggal:todayISO(), status:'Menunggu', tanggapan:'', tgl_tanggapan:''});
+  saveAll(); msg='Laporan berhasil dikirim ke admin.'; activeTab='riwayat'; render();
+}
+function openRespond(id){ respondingId=id; render(); }
+function kirimTanggapan(id){
+  const val = $('tg_'+id).value.trim();
+  if(!val){msg='Tanggapan tidak boleh kosong.';render();return;}
+  laporanData = laporanData.map(l=>l.id===id?{...l,status:'Ditanggapi',tanggapan:val,tgl_tanggapan:todayISO()}:l);
+  saveAll(); respondingId=null; msg='Tanggapan terkirim.'; render();
+}
+
+/* ===== Render helpers ===== */
+function badge(status){
+  return status==='Ditanggapi'
+    ? `<span class="badge" style="background:#dcfce7;color:#166534">Sudah Ditanggapi</span>`
+    : `<span class="badge" style="background:#fef3c7;color:#92400e">Menunggu Tanggapan</span>`;
+}
+function shell(navHtml, contentHtml){
+  return `
+  <div class="max-w-5xl mx-auto px-4 py-5">
+    <div class="flex items-center justify-between flex-wrap gap-3 mb-5">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xl">🏫</div>
+        <div>
+          <div class="font-bold text-lg leading-tight">SIWALI</div>
+          <div class="text-xs muted leading-tight">Sistem Informasi Wali Murid</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="text-right">
+          <div class="text-sm font-semibold">${esc(session.nama)}</div>
+          <div class="text-xs muted">${session.role==='admin'?'Administrator':'Wali Murid · '+esc(session.siswa_nama)}</div>
+        </div>
+        <button onclick="logout()" class="btn-outline text-sm">Keluar</button>
+      </div>
+    </div>
+    <div class="flex gap-2 flex-wrap mb-5">${navHtml}</div>
+    ${msg? `<div class="mb-4 text-sm rounded-lg px-4 py-2" style="background:#eef2ff;color:#3730a3">${esc(msg)}</div>`:''}
+    ${contentHtml}
+  </div>`;
+}
+function tabBtn(id,label,extra){ return `<button onclick="activeTab='${id}';msg='';render()" class="tab-btn ${activeTab===id?'active':''}">${label}${extra||''}</button>`; }
+
+/* ===== Admin views ===== */
+function viewAdminData(){
+  const rows = siswaData.map((s,i)=>`
+    <tr class="border-b" style="border-color:var(--border)">
+      <td class="py-2 px-2">${i+1}</td>
+      <td class="py-2 px-2 font-medium">${esc(s.nama)}</td>
+      <td class="py-2 px-2">${esc(s.kelas)}</td>
+      <td class="py-2 px-2">${esc(s.wali_nama)}</td>
+      <td class="py-2 px-2 muted">${esc(s.username)}</td>
+      <td class="py-2 px-2 text-right whitespace-nowrap">
+        <button onclick="openSiswaForm('${s.id}')" class="text-indigo-600 font-semibold text-sm mr-3">Edit</button>
+        <button onclick="deleteSiswa('${s.id}')" class="text-red-600 font-semibold text-sm">Hapus</button>
+      </td>
+    </tr>`).join('') || `<tr><td colspan="6" class="py-6 text-center muted">Belum ada data.</td></tr>`;
+
+  const formHtml = siswaForm ? `
+    <form onsubmit="saveSiswa(event)" class="card rounded-xl p-4 mb-4 grid sm:grid-cols-2 gap-3">
+      <div class="sm:col-span-2 font-semibold">${siswaForm.id?'Edit':'Tambah'} Data Siswa & Wali</div>
+      <div><label class="text-xs muted">Nama Siswa</label><input id="s_nama" class="input" value="${esc(siswaForm.nama)}" required></div>
+      <div><label class="text-xs muted">Kelas</label><input id="s_kelas" class="input" value="${esc(siswaForm.kelas)}" required></div>
+      <div><label class="text-xs muted">Nama Wali</label><input id="s_wali" class="input" value="${esc(siswaForm.wali_nama)}" required></div>
+      <div><label class="text-xs muted">Username Wali</label><input id="s_user" class="input" value="${esc(siswaForm.username)}" required></div>
+      <div><label class="text-xs muted">Password Wali</label><input id="s_pass" class="input" value="${esc(siswaForm.password)}" required></div>
+      <div class="sm:col-span-2 flex gap-2 mt-1">
+        <button type="submit" class="btn-primary">Simpan</button>
+        <button type="button" onclick="closeSiswaForm()" class="btn-outline">Batal</button>
+      </div>
+    </form>`:'';
+
+  return `
+    <div class="flex justify-between items-center mb-1 flex-wrap gap-2">
+      <div class="font-semibold text-lg">Data Siswa & Wali</div>
+      ${!siswaForm?`<button onclick="openSiswaForm(null)" class="btn-primary text-sm">+ Tambah Data</button>`:''}
+    </div>
+    <div class="text-sm muted mb-3">Username & password di bawah adalah akun login untuk wali murid. Wali hanya bisa login setelah admin membuat akunnya di sini.</div>
+    ${formHtml}
+    <div class="card rounded-xl overflow-x-auto">
+      <table class="w-full text-sm"><thead><tr class="text-left muted" style="border-bottom:1px solid var(--border)">
+        <th class="py-2 px-2">No</th><th class="py-2 px-2">Siswa</th><th class="py-2 px-2">Kelas</th>
+        <th class="py-2 px-2">Wali</th><th class="py-2 px-2">Username</th><th class="py-2 px-2 text-right">Aksi</th>
+      </tr></thead><tbody>${rows}</tbody></table>
+    </div>`;
+}
+
+function viewAdminNotif(){
+  const formHtml = notifForm ? `
+    <form onsubmit="saveNotif(event)" class="card rounded-xl p-4 mb-4 grid gap-3">
+      <div class="font-semibold">${notifForm.id?'Edit':'Buat'} Pemberitahuan</div>
+      <div><label class="text-xs muted">Judul</label><input id="n_judul" class="input" value="${esc(notifForm.judul)}" required></div>
+      <div><label class="text-xs muted">Isi Pemberitahuan</label><textarea id="n_isi" rows="4" class="input" required>${esc(notifForm.isi)}</textarea></div>
+      <div class="flex gap-2"><button class="btn-primary" type="submit">Simpan</button><button type="button" onclick="closeNotifForm()" class="btn-outline">Batal</button></div>
+    </form>`:'';
+  const list = notifData.map(n=>`
+    <div class="card rounded-xl p-4 mb-3">
+      <div class="flex justify-between items-start gap-3">
+        <div>
+          <div class="font-semibold">${esc(n.judul)}</div>
+          <div class="text-xs muted mb-2">${fmtDate(n.tanggal)}</div>
+        </div>
+        <div class="whitespace-nowrap text-sm">
+          <button onclick="openNotifForm('${n.id}')" class="text-indigo-600 font-semibold mr-3">Edit</button>
+          <button onclick="deleteNotif('${n.id}')" class="text-red-600 font-semibold">Hapus</button>
+        </div>
+      </div>
+      <div class="text-sm">${esc(n.isi)}</div>
+    </div>`).join('') || `<div class="muted text-sm">Belum ada pemberitahuan.</div>`;
+  return `
+    <div class="flex justify-between items-center mb-3">
+      <div class="font-semibold text-lg">Kelola Pemberitahuan</div>
+      ${!notifForm?`<button onclick="openNotifForm(null)" class="btn-primary text-sm">+ Buat Pemberitahuan</button>`:''}
+    </div>
+    ${formHtml}${list}`;
+}
+
+function viewAdminLaporan(){
+  const list = laporanData.map(l=>`
+    <div class="card rounded-xl p-4 mb-3">
+      <div class="flex justify-between items-start gap-3 mb-1">
+        <div>
+          <div class="font-semibold">${esc(l.judul)}</div>
+          <div class="text-xs muted">Dari: ${esc(l.wali_nama)} (Wali dari ${esc(l.siswa_nama)}) · ${fmtDate(l.tanggal)}</div>
+        </div>
+        ${badge(l.status)}
+      </div>
+      <div class="text-sm mb-2">${esc(l.isi)}</div>
+      ${l.status==='Ditanggapi' ? `
+        <div class="text-sm rounded-lg p-3" style="background:var(--bg)">
+          <div class="text-xs font-semibold muted mb-1">Tanggapan Admin · ${fmtDate(l.tgl_tanggapan)}</div>
+          ${esc(l.tanggapan)}
+        </div>
+        <button onclick="openRespond('${l.id}')" class="text-indigo-600 font-semibold text-sm mt-2">Ubah Tanggapan</button>
+      `:''}
+      ${respondingId===l.id ? `
+        <div class="mt-2">
+          <textarea id="tg_${l.id}" rows="3" class="input mb-2" placeholder="Tulis tanggapan...">${esc(l.tanggapan)}</textarea>
+          <button onclick="kirimTanggapan('${l.id}')" class="btn-primary text-sm">Kirim Tanggapan</button>
+          <button onclick="respondingId=null;render()" class="btn-outline text-sm ml-2">Batal</button>
+        </div>`
+        : (l.status!=='Ditanggapi' ? `<button onclick="openRespond('${l.id}')" class="btn-primary text-sm mt-1">Tanggapi</button>` : '')}
+    </div>`).join('') || `<div class="muted text-sm">Belum ada laporan masuk.</div>`;
+  return `<div class="font-semibold text-lg mb-3">Laporan Masuk</div>${list}`;
+}
+
+function viewAdminSettings(){
+  return `
+    <div class="font-semibold text-lg mb-3">Pengaturan Akun Admin</div>
+    <form onsubmit="gantiPasswordAdmin(event)" class="card rounded-xl p-4 grid gap-3 max-w-sm">
+      <div><label class="text-xs muted">Password Lama</label><input id="gp_lama" type="password" class="input" required></div>
+      <div><label class="text-xs muted">Password Baru</label><input id="gp_baru" type="password" class="input" required minlength="6"></div>
+      <div><label class="text-xs muted">Ulangi Password Baru</label><input id="gp_ulang" type="password" class="input" required minlength="6"></div>
+      <button class="btn-primary w-max" type="submit">Simpan Password</button>
+    </form>`;
+}
+
+/* ===== Wali views ===== */
+function viewWaliNotif(){
+  const list = notifData.map(n=>`
+    <div class="card rounded-xl p-4 mb-3">
+      <div class="font-semibold">${esc(n.judul)}</div>
+      <div class="text-xs muted mb-2">${fmtDate(n.tanggal)}</div>
+      <div class="text-sm">${esc(n.isi)}</div>
+    </div>`).join('') || `<div class="muted text-sm">Belum ada pemberitahuan.</div>`;
+  return `<div class="font-semibold text-lg mb-3">Pemberitahuan Sekolah</div>${list}`;
+}
+function viewWaliBuatLaporan(){
+  return `
+    <div class="font-semibold text-lg mb-3">Buat Laporan</div>
+    <form onsubmit="submitLaporan(event)" class="card rounded-xl p-4 grid gap-3 max-w-xl">
+      <div class="text-sm muted">Laporan akan dikirim atas nama ${esc(session.nama)}, wali dari ${esc(session.siswa_nama)}.</div>
+      <div><label class="text-xs muted">Judul Laporan</label><input id="lp_judul" class="input" required placeholder="Contoh: Izin Sakit / Keluhan / Masukan"></div>
+      <div><label class="text-xs muted">Isi Laporan</label><textarea id="lp_isi" rows="5" class="input" required placeholder="Tuliskan detail laporan..."></textarea></div>
+      <button type="submit" class="btn-primary w-max">Kirim Laporan</button>
+    </form>`;
+}
+function viewWaliRiwayat(){
+  const mine = laporanData.filter(l=>l.wali_username===session.username);
+  const list = mine.map(l=>`
+    <div class="card rounded-xl p-4 mb-3">
+      <div class="flex justify-between items-start gap-3 mb-1">
+        <div class="font-semibold">${esc(l.judul)}</div>${badge(l.status)}
+      </div>
+      <div class="text-xs muted mb-2">${fmtDate(l.tanggal)}</div>
+      <div class="text-sm mb-2">${esc(l.isi)}</div>
+      ${l.status==='Ditanggapi'?`<div class="text-sm rounded-lg p-3" style="background:var(--bg)"><div class="text-xs font-semibold muted mb-1">Tanggapan Admin · ${fmtDate(l.tgl_tanggapan)}</div>${esc(l.tanggapan)}</div>`:`<div class="text-xs muted italic">Menunggu tanggapan admin...</div>`}
+    </div>`).join('') || `<div class="muted text-sm">Anda belum pernah membuat laporan.</div>`;
+  return `<div class="font-semibold text-lg mb-3">Riwayat Laporan Saya</div>${list}`;
+}
+
+/* ===== Login screen ===== */
+function renderLogin(){
+  return `
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-sm">
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl mx-auto mb-3">🏫</div>
+        <div class="font-bold text-2xl">SIWALI</div>
+        <div class="text-sm muted">Sistem Informasi Wali Murid</div>
+      </div>
+      <div class="card rounded-2xl p-5">
+        <div class="flex gap-2 mb-4">
+          <button onclick="loginTab='wali';msg='';render()" class="flex-1 tab-btn ${loginTab==='wali'?'active':''}">Wali Murid</button>
+          <button onclick="loginTab='admin';msg='';render()" class="flex-1 tab-btn ${loginTab==='admin'?'active':''}">Admin</button>
+        </div>
+        ${msg? `<div class="mb-3 text-sm rounded-lg px-3 py-2" style="background:#fee2e2;color:#991b1b">${esc(msg)}</div>`:''}
+        ${loginTab==='wali' ? `
+          <form onsubmit="doLoginWali(event)" class="grid gap-3">
+            <div><label class="text-xs muted">Username</label><input id="lw_user" class="input" required autocomplete="username"></div>
+            <div><label class="text-xs muted">Password</label><input id="lw_pass" type="password" class="input" required autocomplete="current-password"></div>
+            <button class="btn-primary mt-1">Masuk</button>
+            <div class="text-xs muted text-center mt-1">Belum punya akun? Akun wali dibuatkan oleh admin sekolah, silakan hubungi admin.</div>
+          </form>` : `
+          <form onsubmit="doLoginAdmin(event)" class="grid gap-3">
+            <div><label class="text-xs muted">Username</label><input id="la_user" class="input" required autocomplete="username"></div>
+            <div><label class="text-xs muted">Password</label><input id="la_pass" type="password" class="input" required autocomplete="current-password"></div>
+            <button class="btn-primary mt-1">Masuk</button>
+          </form>`}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ===== Main render ===== */
+function render(){
+  const app = $('app');
+  if(!session){ app.innerHTML = renderLogin(); return; }
+  if(session.role==='admin'){
+    if(!activeTab) activeTab='data';
+    const pending = laporanData.filter(l=>l.status==='Menunggu').length;
+    const nav = tabBtn('data','Data Siswa & Wali') + tabBtn('notif','Pemberitahuan') + tabBtn('laporan','Laporan Masuk', pending?` <span class="badge" style="background:#fca5a5;color:#7f1d1d">${pending}</span>`:'') + tabBtn('setting','Pengaturan');
+    let content='';
+    if(activeTab==='data') content=viewAdminData();
+    else if(activeTab==='notif') content=viewAdminNotif();
+    else if(activeTab==='laporan') content=viewAdminLaporan();
+    else content=viewAdminSettings();
+    app.innerHTML = shell(nav, content);
+  } else {
+    if(!activeTab) activeTab='notif';
+    const nav = tabBtn('notif','Pemberitahuan') + tabBtn('buat','Buat Laporan') + tabBtn('riwayat','Laporan Saya');
+    let content='';
+    if(activeTab==='notif') content=viewWaliNotif();
+    else if(activeTab==='buat') content=viewWaliBuatLaporan();
+    else content=viewWaliRiwayat();
+    app.innerHTML = shell(nav, content);
+  }
+  msg='';
+}
+render();
+</script>
+</body>
+</html>
